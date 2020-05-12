@@ -5,12 +5,14 @@ import io from "socket.io-client";
 import InfoBar from "../InfoBar/InfoBar";
 import Input from "../Input/Input";
 import Messages from "../Messages/Messages";
+import TextContainer from "../TextContainer/TextContainer";
 
 let socket;
 
 const Chat = ({ location }) => {
   const [name, setName] = useState("");
   const [room, setRoom] = useState("");
+  const [users, setUsers] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const ENDPOINT = "https://dreamchat-backend.herokuapp.com/";
@@ -36,7 +38,11 @@ const Chat = ({ location }) => {
     socket.on("message", (message) => {
       setMessages([...messages, message]);
     });
-  }, [messages]);
+
+    socket.on("roomData", ({ users }) => {
+      setUsers(users);
+    });
+  }, []);
 
   const sendMessage = (event) => {
     event.preventDefault();
@@ -58,6 +64,7 @@ const Chat = ({ location }) => {
           sendMessage={sendMessage}
         />
       </div>
+      <TextContainer users={users} />
     </div>
   );
 };
