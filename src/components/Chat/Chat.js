@@ -16,6 +16,7 @@ const Chat = ({ location }) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const ENDPOINT = "https://dreamchat-backend.herokuapp.com/";
+  // const ENDPOINT = "http://localhost:5000";
 
   useEffect(() => {
     const { name, room } = queryString.parse(location.search);
@@ -42,7 +43,7 @@ const Chat = ({ location }) => {
     socket.on("roomData", ({ users }) => {
       setUsers(users);
     });
-  }, []);
+  }, [messages]);
 
   const sendMessage = (event) => {
     event.preventDefault();
@@ -50,8 +51,6 @@ const Chat = ({ location }) => {
       socket.emit("sendMessage", message, () => setMessage(""));
     }
   };
-
-  console.log(message, messages);
 
   return (
     <div className="outerContainer">
